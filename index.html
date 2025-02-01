@@ -1,0 +1,68 @@
+<!doctype html>
+<html lang="zh">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>加载中...</title>
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+    <div class="blur-container">
+        <div class="blur-background"></div>
+        <div class="datetime">
+            <div class="time">12:00:00</div>
+            <div class="date">2024年1月1日 星期一</div>
+        </div>
+        <div class="profile">
+            <div class="avatar-container">
+                <div class="avatar"></div>
+                <div class="name"></div>
+            </div>
+            <p class="intro-1"></p>
+            <p class="intro-2"></p>
+        </div>
+    </div>
+
+    <script>
+        // 加载 JSON 文件
+        fetch('data.json')
+            .then(response => response.json())
+            .then(data => {
+                // 动态设置页面标题
+                document.title = data.title;
+
+                // 动态设置姓名
+                document.querySelector('.name').textContent = data.name;
+
+                // 动态设置头像字母
+                document.querySelector('.avatar').textContent = data.avatar;
+
+                // 动态设置介绍内容
+                document.querySelector('.intro-1').textContent = data.introduction[0];
+                document.querySelector('.intro-2').textContent = data.introduction[1];
+            })
+            .catch(error => {
+                console.error('加载 JSON 文件失败:', error);
+            });
+
+        // 时间和日期更新代码
+        function updateTime() {
+            const time = document.querySelector('.time');
+            const date = document.querySelector('.date');
+            const now = new Date();
+            const hours = String(now.getHours()).padStart(2, '0');
+            const minutes = String(now.getMinutes()).padStart(2, '0');
+            const seconds = String(now.getSeconds()).padStart(2, '0');
+            const year = now.getFullYear();
+            const month = String(now.getMonth() + 1).padStart(2, '0');
+            const day = String(now.getDate()).padStart(2, '0');
+            const week = ['星期日', '星期一', '星期二', '星期三', '星期四', '星期五', '星期六'][now.getDay()];
+            time.textContent = `${hours}:${minutes}:${seconds}`;
+            date.textContent = `${year}年${month}月${day}日 ${week}`;
+        }
+
+        setInterval(updateTime, 1000);
+        updateTime();
+    </script>
+</body>
+</html>
